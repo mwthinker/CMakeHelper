@@ -1,4 +1,4 @@
-# Extracts the git hash in the SOURCE_DIR and stores it in OUT_VAR, and the date of the commit in OUT_DATE
+# Extracts the git hash in the SOURCE_DIR and stores it in OUT_VAR, and the date of the commit in OUT_DATE (strict ISO 8601-format)
 function(extract_git_hash SOURCE_DIR OUT_VAR OUT_DATE)
 	if (WIN32)
 		execute_process(COMMAND cmd /C "git -C ${SOURCE_DIR} rev-parse HEAD" OUTPUT_VARIABLE VALUE OUTPUT_STRIP_TRAILING_WHITESPACE)
