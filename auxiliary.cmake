@@ -1,8 +1,8 @@
 # Extracts the git hash in the SOURCE_DIR and stores it in OUT_VAR, and the date of the commit in OUT_DATE
-function(extract_git_hash SOURCE_DIR OUT_VAR, OUT_DATE)
+function(extract_git_hash SOURCE_DIR OUT_VAR OUT_DATE)
 	if (WIN32)
 		execute_process(COMMAND cmd /C "git -C ${SOURCE_DIR} rev-parse HEAD" OUTPUT_VARIABLE VALUE OUTPUT_STRIP_TRAILING_WHITESPACE)
-		execute_process(COMMAND cmd /C "git -C show -s --format=%ci ${VALUE}" OUTPUT_VARIABLE VALUE_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
+		execute_process(COMMAND cmd /C "git -C ${SOURCE_DIR} show -s --format=%ci ${VALUE}" OUTPUT_VARIABLE VALUE_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
 	else ()
 		execute_process(COMMAND bash -c "git -C ${SOURCE_DIR} rev-parse HEAD" OUTPUT_VARIABLE VALUE OUTPUT_STRIP_TRAILING_WHITESPACE)
 		execute_process(COMMAND bash -c "git -C ${SOURCE_DIR} show -s --format=%ci ${VALUE}" OUTPUT_VARIABLE VALUE_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -13,7 +13,7 @@ endfunction()
 
 # Creates a GUID from the git hash in the SOURCE_DIR and stores it in OUT_VAR
 function(create_guid_from_source SOURCE_DIR OUT_VAR)
-	extract_git_hash(${SOURCE_DIR} GIT_HASH)
+	extract_git_hash(${SOURCE_DIR} GIT_HASH UNUSED_VAR)
 	string(SUBSTRING ${GIT_HASH} 0 8 S1)
 	string(SUBSTRING ${GIT_HASH} 8 4 S2)
 	string(SUBSTRING ${GIT_HASH} 12 4 S3)
