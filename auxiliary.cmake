@@ -1,0 +1,20 @@
+# Extracts the git hash in the SOURCE_DIR and stores it in OUT_VAR
+function(extract_git_hash SOURCE_DIR OUT_VAR)
+	if (WIN32)
+		execute_process(COMMAND cmd /C "git -C ${CMAKE_CURRENT_SOURCE_DIR} rev-parse HEAD" OUTPUT_VARIABLE VALUE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	else ()
+		execute_process(COMMAND bash -c "git -C ${CMAKE_CURRENT_SOURCE_DIR} rev-parse HEAD" OUTPUT_VARIABLE VALUE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	endif ()
+	set(${OUT_VAR} "${VALUE}" PARENT_SCOPE)
+endfunction()
+
+# Creates a GUID from the git hash in the SOURCE_DIR and stores it in OUT_VAR
+function(create_guid_from_source SOURCE_DIR OUT_VAR)
+	extract_git_hash(${SOURCE_DIR} GIT_HASH)
+	string(SUBSTRING ${GIT_HASH} 0 8 S1)
+	string(SUBSTRING ${GIT_HASH} 8 4 S2)
+	string(SUBSTRING ${GIT_HASH} 12 4 S3)
+	string(SUBSTRING ${GIT_HASH} 16 4 S4)
+	string(SUBSTRING ${GIT_HASH} 20 12 S5)
+	set(${OUT_VAR} "${S1}-${S2}-${S3}-${S4}-${S5}" PARENT_SCOPE)
+endfunction()
